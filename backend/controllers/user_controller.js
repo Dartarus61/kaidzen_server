@@ -1,6 +1,7 @@
 import userService from "../service/user_service.js";
 import { validationResult } from "express-validator";
 import ApiError from "../exception/api_error.js";
+import offer_service from "../service/offer_service.js";
 
 class UserController {
   async registration(req, res, next) {
@@ -71,6 +72,15 @@ class UserController {
       res.json(userData);
     } catch (e) {
       next(e);
+    }
+  }
+  async sendOffer(req, res, next) {
+    try {
+      const data = req.body;
+      const userData = await offer_service.UserSendOffer(data);
+      res.json(userData);
+    } catch (error) {
+      next(error);
     }
   }
 }

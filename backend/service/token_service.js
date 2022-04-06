@@ -7,7 +7,7 @@ class TokenService {
     const accsessToken = jsonwebtoken.sign(
       payload,
       process.env.JWT_ACCESS_SECRET,
-      { expiresIn: "30s" }
+      { expiresIn: "15m" }
     );
     const refreshToken = jsonwebtoken.sign(
       payload,
@@ -20,7 +20,6 @@ class TokenService {
     };
   }
   async saveToken(user, refreshToken) {
-    console.log(user);
     const tokenData = await tokenModel.findOne({
       where: { id: user.id },
     });

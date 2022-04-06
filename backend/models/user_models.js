@@ -23,5 +23,5 @@ User.init(
     timestamps: false,
   }
 );
-User.sync({ alter: true });
+
 export default User;
