@@ -16,6 +16,33 @@ class OfferService {
     });
     return "successful";
   }
+  async UserGetOffers(id) {
+    const user = await Offer.findAll({ where: { UserId: id }, raw: true });
+    return user;
+  }
+  async myGroupOffers(group) {
+    const users = await User.findAll({ where: { group: group }, raw: true });
+    /*  let offers = users.map(async (obj) => {
+      let userOffer = await Offer.findAll({
+        where: { UserId: obj.id },
+        raw: true,
+      });
+      offers += userOffer;
+    });
+    */
+    let OfferArr = [];
+    for (let index = 0; index < users.length; index++) {
+      let userOffer = await Offer.findAll({
+        where: { UserId: users[index].id },
+        raw: true,
+      });
+      if (!userOffer.length) continue;
+      // console.log(userOffer);
+      for (let index = 0; index < userOffer.length; index++) {
+        OfferArr.push(userOffer[index]);
+      }
+    }
+    console.log(OfferArr);
+  }
 }
-Offer.sync({ force: true });
 export default new OfferService();
