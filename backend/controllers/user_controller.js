@@ -83,5 +83,23 @@ class UserController {
       next(error);
     }
   }
+  async getmyoffer(req, res, next) {
+    try {
+      const data = req.body;
+      const userData = await offer_service.UserGetOffers(data.id);
+      res.json(userData);
+    } catch (error) {
+      next(error);
+    }
+  }
+  async staffOffers(req, res, next) {
+    try {
+      const data = req.body;
+      const userData = await offer_service.myGroupOffers(data.group);
+      res.json(userData);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 export default new UserController();
