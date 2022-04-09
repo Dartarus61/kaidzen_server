@@ -12,7 +12,7 @@ class OfferService {
       },
     });
     await user.createOffer({
-      descrition: data.descrition,
+      description: data.description,
       economic: data.economic,
       area_of_improvement: data.area_of_improvement,
     });
@@ -23,26 +23,23 @@ class OfferService {
       where: { UserId: id },
       include: Comment,
     });
-    console.log(typeof user);
-    const k = Offer.build(user, { include: Comment });
-    ///console.log(user);
-    let test = JSON.stringify(user[0], null, 2);
-    console.log(JSON.parse(test));
-    // console.log(user);
-    //console.log(JSON.stringify(user, null, 2));
-    /* for (let index = 0; index < test.length; index++) {
-      if (!test[index].Comments.length) continue;
-      for (let j = 0; j < test[index].Comments.length; index++) {
-        let boss = User.findOne({
-          where: { id: test[index].Comments[j].UserId },
+    let myoffers = [];
+    for (let index = 0; index < user.length; index++) {
+      let parsejson = JSON.stringify(user[index], null, 2);
+      myoffers.push(JSON.parse(parsejson));
+
+      if (!myoffers[index].Comments.length) continue;
+
+      for (let j = 0; j < myoffers[index].Comments.length; j++) {
+        let boss = await User.findOne({
+          where: { id: myoffers[index].Comments[j].UserId },
           raw: true,
         });
-        test[index].Comments[j].Name = boss.name + " " + boss.surname;
-        console.log(j);
+
+        myoffers[index].Comments[j].Name = boss.name + " " + boss.surname;
       }
-      console.log(test);
-    } */
-    return JSON.parse(test);
+    }
+    return myoffers;
   }
   async myGroupOffers(group) {
     const users = await User.findAll({ where: { group: group }, raw: true });
@@ -53,7 +50,6 @@ class OfferService {
         raw: true,
       });
       if (!userOffer.length) continue;
-      //console.log(userOffer);
       for (let index = 0; index < userOffer.length; index++) {
         OfferArr.push(userOffer[index]);
       }

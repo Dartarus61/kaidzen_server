@@ -10,10 +10,10 @@ const sequelize = new Sequelize("postgres", "postgres", "postgres", {
 class Offer extends Model {}
 Offer.init(
   {
-    descrition: { type: DataTypes.STRING, allowNull: false },
+    description: { type: DataTypes.STRING, allowNull: false },
     economic: { type: DataTypes.STRING, allowNull: false },
     area_of_improvement: { type: DataTypes.STRING, allowNull: false },
-    accepted: { type: DataTypes.BOOLEAN, defaultValue: false },
+    accepted: { type: DataTypes.BOOLEAN, defaultValue: null, allowNull: true },
   },
   {
     sequelize, // Экземпляр подключения (обязательно)

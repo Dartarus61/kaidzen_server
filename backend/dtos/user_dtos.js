@@ -6,6 +6,7 @@ class UserDto {
   surname;
   secondname;
   group;
+  role;
   constructor(model) {
     this.email = model.login;
     this.id = model.id;
@@ -14,6 +15,7 @@ class UserDto {
     this.surname = model.surname;
     this.secondname = model.secondname;
     this.group = model.group;
+    this.role = model.role;
   }
 }
 export { UserDto };

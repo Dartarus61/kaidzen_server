@@ -10,7 +10,7 @@ class UserController {
       if (!errors.isEmpty()) {
         return next(ApiError.BadRequest("Ошибка валидации", errors.array()));
       }
-      const { email, password, name, surname, secondname, group } = req.body;
+      const { login, password, name, surname, secondname, group } = req.body;
       const userData = await userService.registration(req.body);
       res.cookie("refreshToken", userData.refreshToken, {
         maxAge: 1 * 60 * 60 * 1000,
@@ -23,8 +23,8 @@ class UserController {
   }
   async login(req, res, next) {
     try {
-      const { email, password } = req.body;
-      const userData = await userService.login(email, password);
+      const { login, password } = req.body;
+      const userData = await userService.login(login, password);
       res.cookie("refreshToken", userData.refreshToken, {
         maxAge: 1 * 60 * 60 * 1000,
         httpOnly: true,
@@ -75,6 +75,7 @@ class UserController {
     }
   }
   async sendOffer(req, res, next) {
+    // я получаю след поля: description, economic, area_of_improvement, id of user
     try {
       const data = req.body;
       const userData = await offer_service.UserSendOffer(data);
@@ -84,6 +85,7 @@ class UserController {
     }
   }
   async getmyoffer(req, res, next) {
+    //я получаю id юзера
     try {
       const data = req.body;
       const userData = await offer_service.UserGetOffers(data.id);
@@ -94,7 +96,7 @@ class UserController {
   }
   async staffOffers(req, res, next) {
     try {
-      const data = req.body;
+      const data = req.body; // id group
       const userData = await offer_service.myGroupOffers(data.group);
       res.json(userData);
     } catch (error) {
@@ -103,7 +105,7 @@ class UserController {
   }
   async setCom(req, res, next) {
     try {
-      const data = req.body; //id post, id user, ctx from user
+      const data = req.body; //{id - post id, ctx - messsage, userId - id of author}
       const myreq = await offer_service.setComment(data);
       res.json(myreq);
     } catch (error) {

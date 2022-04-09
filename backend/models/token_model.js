@@ -18,6 +18,5 @@ UserToken.init(
 );
 User.hasOne(UserToken);
 UserToken.belongsTo(User);
-UserToken.sync();
 
 export default UserToken;
