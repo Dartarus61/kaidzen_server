@@ -87,7 +87,7 @@ class UserController {
     try {
       const data = req.body;
       const userData = await offer_service.UserGetOffers(data.id);
-      res.json(userData);
+      res.send(userData);
     } catch (error) {
       next(error);
     }
@@ -97,6 +97,15 @@ class UserController {
       const data = req.body;
       const userData = await offer_service.myGroupOffers(data.group);
       res.json(userData);
+    } catch (error) {
+      next(error);
+    }
+  }
+  async setCom(req, res, next) {
+    try {
+      const data = req.body; //id post, id user, ctx from user
+      const myreq = await offer_service.setComment(data);
+      res.json(myreq);
     } catch (error) {
       next(error);
     }

@@ -19,5 +19,6 @@ router.get("/users", auth_middleware, user_controller.getUser);
 router.get("/offer", user_controller.sendOffer);
 router.get("/offer/myof", user_controller.getmyoffer);
 router.get("/offer/masters", user_controller.staffOffers);
+router.get("/offer/master/setcom", user_controller.setCom);
 
 export { router };
