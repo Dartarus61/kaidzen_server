@@ -9,17 +9,17 @@ import ApiError from "../exception/api_error.js";
 class UserService {
   async registration(data) {
     const candidate = await User.findOne({
-      where: { login: data.email },
+      where: { login: data.login },
       raw: true,
     });
 
     if (candidate) {
-      throw ApiError.BadRequest(`User with ${data.email} already have account`);
+      throw ApiError.BadRequest(`User with ${data.login} already have account`);
     }
     const hashPass = await bcrypt.hash(data.password, 3);
     const acticationLink = uuidv4();
     const newUser = await User.create({
-      login: data.email,
+      login: data.login,
       password: hashPass,
       name: data.name,
       surname: data.surname,
@@ -28,7 +28,7 @@ class UserService {
       acticationLink: acticationLink,
     });
     /* await mailService.sendActivationMail(
-      data.email,
+      data.login,
       `${process.env.API_URL}/api/activate/${acticationLink}`
     ); */
     const userDto = new UserDto(newUser.toJSON());
@@ -47,15 +47,15 @@ class UserService {
     user.isActivated = true;
     await user.save();
   }
-  async login(email, password) {
+  async login(login, password) {
     const user = await User.findOne({
       where: {
-        login: email,
+        login: login,
       },
       raw: true,
     });
     if (!user) {
-      throw ApiError.BadRequest("user with this email is not found");
+      throw ApiError.BadRequest("user with this login is not found");
     }
     const isPassEq = await bcrypt.compare(password, user.password);
     if (!isPassEq) {
