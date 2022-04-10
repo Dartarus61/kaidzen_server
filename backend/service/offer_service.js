@@ -59,7 +59,7 @@ class OfferService {
   async setComment(data) {
     const newComment = await Offer.findOne({ where: { id: data.id } });
     await newComment.createComment({
-      descrition: data.ctx,
+      description: data.ctx,
       UserId: data.userId,
     });
     return "successful";

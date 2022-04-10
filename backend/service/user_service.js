@@ -97,5 +97,39 @@ class UserService {
     const users = await User.findAll();
     return users;
   }
+  async ChangeRoleUser(userData) {
+    try {
+      const user = await User.update(
+        { role: userData.role },
+        { where: { id: userData.id } }
+      );
+      return "successful";
+    } catch (error) {
+      return ApiError.BadRequest(error);
+    }
+  }
+  async ResetPass(userData) {
+    const user = await User.findOne({
+      where: { login: userData.login },
+      raw: true,
+    });
+    if (!user) {
+      return ApiError.BadRequest("user with this login is not found");
+    } /* else {
+      await mailService.sendActivationMail(
+        data.login,
+        `${process.env.API_URL}/api/activate/${user.acticationLink}`
+      );
+    } */
+    const isPassEq = await bcrypt.compare(userData.password, user.password);
+    if (!isPassEq) {
+      const NewPass = await bcrypt.hash(userData.password, 3);
+      await User.update(
+        { password: NewPass },
+        { where: { login: userData.login } }
+      );
+      return "pass reset";
+    } else return "passwords cant be equals";
+  }
 }
 export default new UserService();

@@ -20,7 +20,7 @@ class MailService {
       subject: "activation link on " + process.env.API_URL,
       text: "",
       html: `<div>
-          <h1> Для активации перейдите по ссылке</h1>
+          <h1> Для подтверждения смены пароля перейдите по ссылке</h1>
           <a href="${link}">${link}</a>
         </div>`,
     });

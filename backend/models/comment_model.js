@@ -10,7 +10,7 @@ const sequelize = new Sequelize("postgres", "postgres", "postgres", {
 class Comment extends Model {}
 Comment.init(
   {
-    descrition: { type: DataTypes.STRING, allowNull: false },
+    description: { type: DataTypes.STRING, allowNull: false },
     UserId: { type: DataTypes.INTEGER, allowNull: false },
   },
   {
