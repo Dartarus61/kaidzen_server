@@ -100,7 +100,7 @@ class UserService {
   async ChangeRoleUser(userData) {
     try {
       const user = await User.update(
-        { role: userData.role },
+        { role: userData.role, area_of_improvement: userData.area },
         { where: { id: userData.id } }
       );
       return "successful";

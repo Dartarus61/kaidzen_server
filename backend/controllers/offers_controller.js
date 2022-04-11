@@ -27,16 +27,35 @@ class OfferController {
   async staffOffers(req, res, next) {
     try {
       const data = req.body; // id group
-      const userData = await offer_service.myGroupOffers(data.group);
+      const userData = await offer_service.myGroupOffers(data.area);
       res.json(userData);
     } catch (error) {
       next(error);
     }
   }
+  async staffOffersFalse(req, res, next) {
+    try {
+      const data = req.body;
+      const userData = await offer_service.resolveOffers(data);
+      res.json(userData);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async setCom(req, res, next) {
     try {
       const data = req.body; //{id - post id, ctx - messsage, userId - id of author}
       const myreq = await offer_service.setComment(data);
+      res.json(myreq);
+    } catch (error) {
+      next(error);
+    }
+  }
+  async setTrueCom(req, res, next) {
+    try {
+      const data = req.body; //{id - post id, ctx - messsage, userId - id of author}
+      const myreq = await offer_service.ItsTrueCom(data);
       res.json(myreq);
     } catch (error) {
       next(error);

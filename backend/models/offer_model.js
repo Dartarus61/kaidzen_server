@@ -13,7 +13,8 @@ Offer.init(
     description: { type: DataTypes.STRING, allowNull: false },
     economic: { type: DataTypes.STRING, allowNull: false },
     area_of_improvement: { type: DataTypes.STRING, allowNull: false },
-    accepted: { type: DataTypes.BOOLEAN, defaultValue: null, allowNull: true },
+    accepted: { type: DataTypes.STRING, defaultValue: null, allowNull: true },
+    solution_temp: { type: DataTypes.BOOLEAN, defaultValue: null },
   },
   {
     sequelize, // Экземпляр подключения (обязательно)
@@ -24,5 +25,4 @@ Offer.init(
 
 User.hasMany(Offer);
 Offer.belongsTo(User);
-
 export default Offer;
