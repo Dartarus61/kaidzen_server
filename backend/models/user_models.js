@@ -15,6 +15,7 @@ User.init(
     surname: { type: DataTypes.STRING, allowNull: false },
     secondname: { type: DataTypes.STRING, allowNull: false },
     group: { type: DataTypes.STRING, allowNull: false },
+    area_of_improvement: { type: DataTypes.STRING, allowNull: true },
     role: { type: DataTypes.STRING, defaultValue: "user" },
     isActivated: { type: DataTypes.BOOLEAN, defaultValue: false },
     acticationLink: { type: DataTypes.STRING, allowNull: true },
@@ -24,5 +25,4 @@ User.init(
     timestamps: false,
   }
 );
-
 export default User;

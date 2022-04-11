@@ -42,19 +42,35 @@ class OfferService {
     return myoffers;
   }
   async myGroupOffers(group) {
-    const users = await User.findAll({ where: { group: group }, raw: true });
-    let OfferArr = [];
-    for (let index = 0; index < users.length; index++) {
-      let userOffer = await Offer.findAll({
-        where: { UserId: users[index].id },
+    const OfferArr = await Offer.findAll({
+      where: { area_of_improvement: group },
+      include: Comment,
+    });
+    let AreaOffers = [];
+    for (let index = 0; index < OfferArr.length; index++) {
+      let ParseOffer = JSON.stringify(OfferArr[index], null, 2);
+      AreaOffers.push(JSON.parse(ParseOffer));
+
+      let user = await User.findOne({
+        where: { id: OfferArr[index].UserId },
         raw: true,
       });
-      if (!userOffer.length) continue;
-      for (let index = 0; index < userOffer.length; index++) {
-        OfferArr.push(userOffer[index]);
+
+      AreaOffers[index].Author = user.name + " " + user.surname;
+      AreaOffers[index].Group = user.group;
+
+      if (!AreaOffers[index].Comments.length) continue;
+
+      for (let j = 0; j < AreaOffers[index].Comments.length; j++) {
+        let boss = await User.findOne({
+          where: { id: AreaOffers[index].Comments[j].UserId },
+          raw: true,
+        });
+
+        myoffers[index].Comments[j].Name = boss.name + " " + boss.surname;
       }
     }
-    return OfferArr;
+    return AreaOffers;
   }
   async setComment(data) {
     const newComment = await Offer.findOne({ where: { id: data.id } });
