@@ -28,6 +28,7 @@ async function Offerconstruct(OfferArr) {
       AreaOffers[index].Comments[j].Name = boss.name + " " + boss.surname;
     }
   }
+  AreaOffers.sort((a, b) => a.id - b.id);
   return AreaOffers;
 }
 class OfferService {

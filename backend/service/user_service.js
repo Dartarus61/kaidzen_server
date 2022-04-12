@@ -95,7 +95,13 @@ class UserService {
   }
   async getAllUsers() {
     const users = await User.findAll();
-    return users;
+    let AreaUsers = [];
+    for (let index = 0; index < users.length; index++) {
+      let ParseOffer = JSON.stringify(users[index], null, 2);
+      AreaUsers.push(JSON.parse(ParseOffer));
+    }
+    AreaUsers.sort((a, b) => a.id - b.id);
+    return AreaUsers;
   }
   async ChangeRoleUser(userData) {
     try {
