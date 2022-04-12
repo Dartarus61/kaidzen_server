@@ -40,12 +40,19 @@ class OfferService {
         id: data.id,
       },
     });
-    await user.createOffer({
-      description: data.description,
-      economic: data.economic,
-      area_of_improvement: data.area_of_improvement,
-      filePath: filedata.path,
-    });
+    if (filedata)
+      await user.createOffer({
+        description: data.description,
+        economic: data.economic,
+        area_of_improvement: data.area_of_improvement,
+        filePath: filedata.path,
+      });
+    else
+      await user.createOffer({
+        description: data.description,
+        economic: data.economic,
+        area_of_improvement: data.area_of_improvement,
+      });
     return "successful";
   }
   async UserGetOffers(id) {
