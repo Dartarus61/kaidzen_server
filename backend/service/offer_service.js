@@ -66,11 +66,15 @@ class OfferService {
         myoffers[index].Comments[j].Name = boss.name + " " + boss.surname;
       }
     }
+    myoffers.sort((a, b) => a.id - b.id);
     return myoffers;
   }
   async myGroupOffers(area) {
     const OfferArr = await Offer.findAll({
-      where: { area_of_improvement: area },
+      where: {
+        area_of_improvement: area,
+        accepted: { [Op.eq]: "На рассмотрении" },
+      },
       include: Comment,
     });
     return await Offerconstruct(OfferArr);
