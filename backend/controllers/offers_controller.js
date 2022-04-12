@@ -8,7 +8,8 @@ class OfferController {
     // я получаю след поля: description, economic, area_of_improvement, id of user
     try {
       const data = req.body;
-      const userData = await offer_service.UserSendOffer(data);
+      const filedata = req.file;
+      const userData = await offer_service.UserSendOffer(data, filedata);
       res.json(userData);
     } catch (error) {
       next(error);

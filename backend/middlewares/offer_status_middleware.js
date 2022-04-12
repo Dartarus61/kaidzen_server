@@ -17,7 +17,7 @@ export default async function (req, res, next) {
       where: { area_of_improvement: offer.area_of_improvement },
       raw: true,
     });
-    console.log(count.length);
+
     if (count.length == offer.Comments.length) {
       if (offer.solution_temp == null)
         AllOfffers[index].update({ accepted: true });

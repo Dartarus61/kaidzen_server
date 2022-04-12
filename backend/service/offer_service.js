@@ -2,8 +2,8 @@ import User from "../models/user_models.js";
 import Comment from "../models/comment_model.js";
 import Offer from "../models/offer_model.js";
 import { Op } from "sequelize";
-
 import ApiError from "../exception/api_error.js";
+
 async function Offerconstruct(OfferArr) {
   let AreaOffers = [];
   for (let index = 0; index < OfferArr.length; index++) {
@@ -15,7 +15,8 @@ async function Offerconstruct(OfferArr) {
       raw: true,
     });
 
-    AreaOffers[index].Author = user.name + " " + user.surname;
+    AreaOffers[index].Author =
+      user.name + " " + user.surname + " " + user.secondname;
     AreaOffers[index].Group = user.group;
     if (!AreaOffers[index].Comments.length) continue;
 
@@ -25,14 +26,15 @@ async function Offerconstruct(OfferArr) {
         raw: true,
       });
 
-      AreaOffers[index].Comments[j].Name = boss.name + " " + boss.surname;
+      AreaOffers[index].Comments[j].Name =
+        boss.name + " " + boss.surname + " " + boss.secondname;
     }
   }
   AreaOffers.sort((a, b) => a.id - b.id);
   return AreaOffers;
 }
 class OfferService {
-  async UserSendOffer(data) {
+  async UserSendOffer(data, filedata) {
     const user = await User.findOne({
       where: {
         id: data.id,
@@ -42,6 +44,7 @@ class OfferService {
       description: data.description,
       economic: data.economic,
       area_of_improvement: data.area_of_improvement,
+      filePath: filedata.path,
     });
     return "successful";
   }
@@ -63,7 +66,8 @@ class OfferService {
           raw: true,
         });
 
-        myoffers[index].Comments[j].Name = boss.name + " " + boss.surname;
+        myoffers[index].Comments[j].Name =
+          boss.name + " " + boss.surname + " " + boss.secondname;
       }
     }
     myoffers.sort((a, b) => a.id - b.id);
@@ -73,8 +77,9 @@ class OfferService {
     const OfferArr = await Offer.findAll({
       where: {
         area_of_improvement: area,
-        accepted: { [Op.eq]: "На рассмотрении" },
+        [Op.or]: [{ accepted: "На рассмотрении" }, { accepted: null }],
       },
+
       include: Comment,
     });
     return await Offerconstruct(OfferArr);
@@ -83,7 +88,7 @@ class OfferService {
     const offers = await Offer.findAll({
       where: {
         area_of_improvement: data.area,
-        accepted: { [Op.ne]: "На рассмотрении" },
+        [Op.or]: [{ accepted: "true" }, { accepted: "false" }],
       },
       include: Comment,
     });

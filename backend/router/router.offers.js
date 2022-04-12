@@ -4,11 +4,14 @@ import { body } from "express-validator";
 import offers_controller from "../controllers/offers_controller.js";
 import auth_middleware from "../middlewares/auth_middleware.js";
 import offer_status_middleware from "../middlewares/offer_status_middleware.js";
+import { upload } from "../upload.js";
+import multer from "multer";
 
 const Offer_router = new Router();
 
 Offer_router.post(
   "/offer",
+  multer({ storage: upload }).single("filedata"),
   offer_status_middleware,
   offers_controller.sendOffer
 ); // send offer from user to db

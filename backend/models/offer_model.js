@@ -15,6 +15,7 @@ Offer.init(
     area_of_improvement: { type: DataTypes.STRING, allowNull: false },
     accepted: { type: DataTypes.STRING, defaultValue: null, allowNull: true },
     solution_temp: { type: DataTypes.BOOLEAN, defaultValue: null },
+    filePath: { type: DataTypes.STRING, allowNull: true },
   },
   {
     sequelize, // Экземпляр подключения (обязательно)
