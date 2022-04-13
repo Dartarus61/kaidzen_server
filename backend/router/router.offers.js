@@ -15,7 +15,7 @@ Offer_router.post(
   offer_status_middleware,
   offers_controller.sendOffer
 ); // send offer from user to db
-Offer_router.post("/download", offers_controller.FileDownload);
+Offer_router.get("/download", offers_controller.FileDownload);
 Offer_router.post(
   "/offer/myof",
   offer_status_middleware,

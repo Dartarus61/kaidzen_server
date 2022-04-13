@@ -57,6 +57,15 @@ class UserController {
       next(error);
     }
   }
+  async changeData(req, res, next) {
+    try {
+      const new_Data = req.body;
+      const output = await userService.ChangeData(new_Data);
+      res.json(output);
+    } catch (error) {
+      next(error);
+    }
+  }
   async activation(req, res, next) {
     try {
       const acticationLink = req.params.link;

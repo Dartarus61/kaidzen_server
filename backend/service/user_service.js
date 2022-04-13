@@ -114,6 +114,23 @@ class UserService {
       return ApiError.BadRequest(error);
     }
   }
+  async ChangeData(data) {
+    try {
+      const user = await User.update(
+        {
+          login: data.login,
+          name: data.name,
+          surname: data.surname,
+          secondname: data.secondname,
+          group: data.group,
+        },
+        { where: { login: data.login } }
+      );
+      return "data changed";
+    } catch (error) {
+      return ApiError.BadRequest(error);
+    }
+  }
   async ResetPass(userData) {
     const user = await User.findOne({
       where: { login: userData.login },

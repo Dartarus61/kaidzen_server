@@ -14,8 +14,9 @@ User_router.post(
 User_router.post("/login", user_controller.login);
 User_router.post("/logout", user_controller.logout);
 User_router.post("/users/changerole", user_controller.ChangeRole);
+User_router.post("/resetpass", user_controller.resetPass);
+User_router.post("/changedata", user_controller.changeData);
 User_router.get("/activate/:link", user_controller.activation);
 User_router.get("/refresh", user_controller.refresh);
 User_router.get("/users", /*auth_middleware,*/ user_controller.getUser);
-User_router.post("/resetpass", user_controller.resetPass);
 export { User_router };
