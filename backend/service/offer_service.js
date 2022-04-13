@@ -88,22 +88,22 @@ class OfferService {
       },
       include: Comment,
     });
-    let MastersOffers = [];
-    for (let index = 0; index < OfferArr.length; index++) {
-      let parsejson = JSON.parse(JSON.stringify(OfferArr[index], null, 2));
-      if (!parsejson.Comments.length) continue;
-      let Person = false;
-      for (let j = 0; j < parsejson.Comments.length; j++) {
-        if (parsejson.Comments[j].UserId == data.id) {
-          Person = true;
+    let finalMas = [];
+    let MastersOffers = await Offerconstruct(OfferArr);
+    for (let index = 0; index < MastersOffers.length; index++) {
+      if (!MastersOffers[index].Comments.length) {
+        finalMas.push(MastersOffers[index]);
+        continue;
+      }
+      for (let j = 0; j < MastersOffers[index].Comments.length; j++) {
+        if (MastersOffers[index].Comments[j].UserId == data.id) continue;
+        else {
+          finalMas.push(MastersOffers[index]);
           break;
         }
       }
-      if (Person) continue;
-      else MastersOffers.push(parsejson);
     }
-    MastersOffers.sort((a, b) => a.id - b.id);
-    return MastersOffers;
+    return finalMas;
   }
   async resolveOffers(data) {
     const offers = await Offer.findAll({
