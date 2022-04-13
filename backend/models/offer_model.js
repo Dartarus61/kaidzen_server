@@ -16,6 +16,7 @@ Offer.init(
     accepted: { type: DataTypes.STRING, defaultValue: null, allowNull: true },
     solution_temp: { type: DataTypes.BOOLEAN, defaultValue: null },
     filePath: { type: DataTypes.STRING, allowNull: true },
+    fileName: { type: DataTypes.STRING, allowNull: true },
   },
   {
     sequelize, // Экземпляр подключения (обязательно)
@@ -26,4 +27,5 @@ Offer.init(
 
 User.hasMany(Offer);
 Offer.belongsTo(User);
+
 export default Offer;

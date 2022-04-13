@@ -62,5 +62,14 @@ class OfferController {
       next(error);
     }
   }
+  async FileDownload(req, res, next) {
+    try {
+      const data = req.body;
+      const path = await offer_service.download(data);
+      res.download(path[0], path[1]);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 export default new OfferController();

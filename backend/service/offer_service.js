@@ -1,7 +1,8 @@
 import User from "../models/user_models.js";
 import Comment from "../models/comment_model.js";
 import Offer from "../models/offer_model.js";
-import { Op } from "sequelize";
+import path from "path";
+import { Op, where } from "sequelize";
 import ApiError from "../exception/api_error.js";
 
 async function Offerconstruct(OfferArr) {
@@ -40,14 +41,19 @@ class OfferService {
         id: data.id,
       },
     });
-    if (filedata)
+    console.log(filedata);
+    if (filedata) {
+      let mypath = path.resolve(filedata.path);
+      console.log(mypath);
+      console.log(filedata.path);
       await user.createOffer({
         description: data.description,
         economic: data.economic,
         area_of_improvement: data.area_of_improvement,
-        filePath: filedata.path,
+        filePath: mypath,
+        fileName: filedata.originalname,
       });
-    else
+    } else
       await user.createOffer({
         description: data.description,
         economic: data.economic,
@@ -131,6 +137,12 @@ class OfferService {
       UserId: data.userId,
     });
     return "successful true";
+  }
+  async download(data) {
+    const file = await Offer.findOne({ where: { id: data.id } });
+    let output = JSON.parse(JSON.stringify(file, null, 2));
+    const name = output.fileName;
+    return [output.filePath, output.fileName];
   }
 }
 export default new OfferService();
