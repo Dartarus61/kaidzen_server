@@ -124,7 +124,7 @@ class UserService {
           secondname: data.secondname,
           group: data.group,
         },
-        { where: { login: data.login } }
+        { where: { id: data.id } }
       );
       return "data changed";
     } catch (error) {
