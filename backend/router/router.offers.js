@@ -20,8 +20,16 @@ Offer_router.post(
   offer_status_middleware,
   offers_controller.getmyoffer
 ); // вывод оферов юзера
-Offer_router.post("/offer/masters", offers_controller.staffOffers); // output all offers from group of CEO
-Offer_router.post("/offer/masters/false", offers_controller.staffOffersFalse); // output all false offers from group of CEO
+Offer_router.post(
+  "/offer/masters",
+  offer_status_middleware,
+  offers_controller.staffOffers
+); // output all offers from group of CEO
+Offer_router.post(
+  "/offer/masters/false",
+  offer_status_middleware,
+  offers_controller.staffOffersFalse
+); // output all false offers from group of CEO
 Offer_router.post(
   "/offer/master/setcom",
   offer_status_middleware,

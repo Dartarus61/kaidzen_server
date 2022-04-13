@@ -28,7 +28,7 @@ class OfferController {
   async staffOffers(req, res, next) {
     try {
       const data = req.body; // id group
-      const userData = await offer_service.myGroupOffers(data.area);
+      const userData = await offer_service.myGroupOffers(data);
       res.json(userData);
     } catch (error) {
       next(error);

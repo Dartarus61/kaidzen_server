@@ -80,16 +80,30 @@ class OfferService {
     myoffers.sort((a, b) => a.id - b.id);
     return myoffers;
   }
-  async myGroupOffers(area) {
+  async myGroupOffers(data) {
     const OfferArr = await Offer.findAll({
       where: {
-        area_of_improvement: area,
+        area_of_improvement: data.area,
         [Op.or]: [{ accepted: "На рассмотрении" }, { accepted: null }],
       },
-
       include: Comment,
     });
-    return await Offerconstruct(OfferArr);
+    let MastersOffers = [];
+    for (let index = 0; index < OfferArr.length; index++) {
+      let parsejson = JSON.parse(JSON.stringify(OfferArr[index], null, 2));
+      if (!parsejson.Comments.length) continue;
+      let Person = false;
+      for (let j = 0; j < parsejson.Comments.length; j++) {
+        if (parsejson.Comments[j].UserId == data.id) {
+          Person = true;
+          break;
+        }
+      }
+      if (Person) continue;
+      else MastersOffers.push(parsejson);
+    }
+    MastersOffers.sort((a, b) => a.id - b.id);
+    return MastersOffers;
   }
   async resolveOffers(data) {
     const offers = await Offer.findAll({
