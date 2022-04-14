@@ -6,7 +6,7 @@ import TokenModel from './models/token_model.js'
 
 export async function db_connect() {
     const sequelize = process.env.DATABASE_URL
-        ? new Sequelize(process.env.DATABASE_URL)
+        ? new Sequelize(process.env.DATABASE_URL, { ssl: true })
         : new Sequelize(
               process.env.DB_NAME || 'postgres',
               process.env.DB_USER || 'postgres',
