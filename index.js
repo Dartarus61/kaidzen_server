@@ -1,4 +1,4 @@
-import * as dotenv from 'dotenv'
+import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
@@ -15,6 +15,8 @@ app.use(cors())
 app.use('/api', User_router)
 app.use('/api', Offer_router)
 app.use(errorMiddleware)
+
+console.log(process.env)
 
 const start = async () => {
     try {
