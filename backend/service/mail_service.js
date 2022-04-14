@@ -1,5 +1,4 @@
 import nodemailer from "nodemailer";
-import "../config.js";
 
 class MailService {
   constructor() {
