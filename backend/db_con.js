@@ -5,8 +5,12 @@ import UserModel from './models/user_model.js'
 import TokenModel from './models/token_model.js'
 
 export async function db_connect() {
+    console.log(process.env.DATABASE_URL)
     const sequelize = process.env.DATABASE_URL
-        ? new Sequelize(process.env.DATABASE_URL, { ssl: true })
+        ? new Sequelize(process.env.DATABASE_URL, {
+              dialect: 'postgres',
+              ssl: true,
+          })
         : new Sequelize(
               process.env.DB_NAME || 'postgres',
               process.env.DB_USER || 'postgres',
