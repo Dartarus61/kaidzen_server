@@ -88,13 +88,16 @@ class UserController {
       next(e);
     }
   }
-<<<<<<< HEAD
+
   async resetPass(req, res, next) {
     try {
       const userData = req.body;
       const output = await userService.ResetPass(userData);
       res.json(output);
-=======
+    } catch (e) {
+      next(e);
+    }
+  }
   async sendOffer(req, res, next) {
     try {
       const data = req.body;
@@ -118,7 +121,6 @@ class UserController {
       const data = req.body;
       const userData = await offer_service.myGroupOffers(data.group);
       res.json(userData);
->>>>>>> 7fc875997a97fd0906dc5c0bcf62a22956e95b12
     } catch (error) {
       next(error);
     }
