@@ -6,7 +6,7 @@ export default async function (req, res, next) {
   const AllOfffers = await Offer.findAll({
     include: Comment,
   });
-
+  if (!AllOfffers) next();
   for (let index = 0; index < AllOfffers.length; index++) {
     let parseOffer = JSON.stringify(AllOfffers[index], null, 2);
     const offer = JSON.parse(parseOffer);

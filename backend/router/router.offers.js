@@ -12,7 +12,6 @@ const Offer_router = new Router();
 Offer_router.post(
   "/offer",
   multer({ storage: upload }).single("filedata"),
-  offer_status_middleware,
   offers_controller.sendOffer
 ); // send offer from user to db
 Offer_router.get("/download", offers_controller.FileDownload);
@@ -41,5 +40,6 @@ Offer_router.post(
   offer_status_middleware,
   offers_controller.setTrueCom
 ); // set comment to users post
+Offer_router.get("/allposts", offer_status_middleware, offers_controller.posts);
 
 export { Offer_router };

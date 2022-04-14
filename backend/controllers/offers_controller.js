@@ -71,5 +71,13 @@ class OfferController {
       next(error);
     }
   }
+  async posts(req, res, next) {
+    try {
+      const data = await offer_service.getalloffers();
+      res.json(data);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 export default new OfferController();

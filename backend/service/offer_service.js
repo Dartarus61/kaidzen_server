@@ -19,7 +19,7 @@ async function Offerconstruct(OfferArr) {
     AreaOffers[index].Author =
       user.name + " " + user.surname + " " + user.secondname;
     AreaOffers[index].Group = user.group;
-    if (!AreaOffers[index].Comments.length) continue;
+    if (!AreaOffers[index].Comments) continue;
 
     for (let j = 0; j < AreaOffers[index].Comments.length; j++) {
       let boss = await User.findOne({
@@ -41,7 +41,6 @@ class OfferService {
         id: data.id,
       },
     });
-    console.log(filedata);
     if (filedata) {
       let mypath = path.resolve(filedata.path);
       console.log(mypath);
@@ -66,6 +65,7 @@ class OfferService {
       where: { UserId: id },
       include: Comment,
     });
+    if (!user) return 0;
     let myoffers = [];
     for (let index = 0; index < user.length; index++) {
       let parsejson = JSON.stringify(user[index], null, 2);
@@ -143,6 +143,10 @@ class OfferService {
     let output = JSON.parse(JSON.stringify(file, null, 2));
     const name = output.fileName;
     return [output.filePath, output.fileName];
+  }
+  async getalloffers() {
+    const offers = await Offer.findAll();
+    return await Offerconstruct(offers);
   }
 }
 export default new OfferService();
