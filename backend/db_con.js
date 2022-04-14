@@ -10,6 +10,9 @@ export async function db_connect() {
         ? new Sequelize(process.env.DATABASE_URL, {
               dialect: 'postgres',
               ssl: true,
+              dialectOptions: {
+                  ssl: true,
+              },
           })
         : new Sequelize(
               process.env.DB_NAME || 'postgres',
