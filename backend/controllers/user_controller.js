@@ -88,39 +88,11 @@ class UserController {
       next(e);
     }
   }
-
   async resetPass(req, res, next) {
     try {
       const userData = req.body;
       const output = await userService.ResetPass(userData);
       res.json(output);
-    } catch (e) {
-      next(e);
-    }
-  }
-  async sendOffer(req, res, next) {
-    try {
-      const data = req.body;
-      const userData = await offer_service.UserSendOffer(data);
-      res.json(userData);
-    } catch (error) {
-      next(error);
-    }
-  }
-  async getmyoffer(req, res, next) {
-    try {
-      const data = req.body;
-      const userData = await offer_service.UserGetOffers(data.id);
-      res.json(userData);
-    } catch (error) {
-      next(error);
-    }
-  }
-  async staffOffers(req, res, next) {
-    try {
-      const data = req.body;
-      const userData = await offer_service.myGroupOffers(data.group);
-      res.json(userData);
     } catch (error) {
       next(error);
     }

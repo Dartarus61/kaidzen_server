@@ -26,8 +26,4 @@ User.init(
   }
 );
 
-<<<<<<< HEAD
-=======
-User.sync();
->>>>>>> 7fc875997a97fd0906dc5c0bcf62a22956e95b12
 export default User;
