@@ -45,6 +45,8 @@ export async function db_connect() {
 
         UserModel.hasMany(OfferModel)
         OfferModel.belongsTo(UserModel)
+
+        sequelize.sync()
     } catch (e) {
         console.log('Невозможно выполнить подключение к БД: ', e)
     }
