@@ -19,8 +19,8 @@ app.use(errorMiddleware)
 const start = async () => {
     try {
         await db_connect()
-        app.listen(3001, () => {
-            console.log(`server started on ${3001}`)
+        app.listen(process.env.PORT || 3001, () => {
+            console.log(`server started on ${process.env.PORT || 3001}`)
         })
     } catch (error) {
         console.log(error)
