@@ -12,6 +12,7 @@ export async function db_connect() {
               ssl: true,
               dialectOptions: {
                   ssl: true,
+                  rejectUnauthorized: false,
               },
           })
         : new Sequelize(
