@@ -11,8 +11,10 @@ export async function db_connect() {
               dialect: 'postgres',
               ssl: true,
               dialectOptions: {
-                  ssl: true,
-                  rejectUnauthorized: false,
+                  ssl: {
+                      require: true,
+                      rejectUnauthorized: false,
+                  },
               },
           })
         : new Sequelize(
