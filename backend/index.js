@@ -3,15 +3,17 @@ import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { db_connect } from "./db_con.js";
-import { router } from "./router/index.js";
+import { User_router } from "./router/router.users.js";
 import "dotenv/config";
 import errorMiddleware from "./middlewares/error_midleware.js";
+import { Offer_router } from "./router/router.offers.js";
 
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
-app.use("/api", router);
+app.use("/api", User_router);
+app.use("/api", Offer_router);
 app.use(errorMiddleware);
 
 const start = async () => {

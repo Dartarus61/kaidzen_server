@@ -1,15 +1,12 @@
 import userService from "../service/user_service.js";
 import { validationResult } from "express-validator";
 import ApiError from "../exception/api_error.js";
+import offer_service from "../service/offer_service.js";
 
 class UserController {
   async registration(req, res, next) {
     try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return next(ApiError.BadRequest("Ошибка валидации", errors.array()));
-      }
-      const { email, password, name, surname, secondname, group } = req.body;
+      const { login, password, name, surname, secondname, group } = req.body;
       const userData = await userService.registration(req.body);
       res.cookie("refreshToken", userData.refreshToken, {
         maxAge: 1 * 60 * 60 * 1000,
@@ -22,8 +19,8 @@ class UserController {
   }
   async login(req, res, next) {
     try {
-      const { email, password } = req.body;
-      const userData = await userService.login(email, password);
+      const { login, password } = req.body;
+      const userData = await userService.login(login, password);
       res.cookie("refreshToken", userData.refreshToken, {
         maxAge: 1 * 60 * 60 * 1000,
         httpOnly: true,
@@ -51,6 +48,24 @@ class UserController {
       next(e);
     }
   }
+  async ChangeRole(req, res, next) {
+    try {
+      const new_UserData = req.body;
+      const output = await userService.ChangeRoleUser(new_UserData);
+      res.json(output);
+    } catch (error) {
+      next(error);
+    }
+  }
+  async changeData(req, res, next) {
+    try {
+      const new_Data = req.body;
+      const output = await userService.ChangeData(new_Data);
+      res.json(output);
+    } catch (error) {
+      next(error);
+    }
+  }
   async activation(req, res, next) {
     try {
       const acticationLink = req.params.link;
@@ -71,6 +86,15 @@ class UserController {
       res.json(userData);
     } catch (e) {
       next(e);
+    }
+  }
+  async resetPass(req, res, next) {
+    try {
+      const userData = req.body;
+      const output = await userService.ResetPass(userData);
+      res.json(output);
+    } catch (error) {
+      next(error);
     }
   }
 }

@@ -9,17 +9,17 @@ import ApiError from "../exception/api_error.js";
 class UserService {
   async registration(data) {
     const candidate = await User.findOne({
-      where: { login: data.email },
+      where: { login: data.login },
       raw: true,
     });
 
     if (candidate) {
-      throw ApiError.BadRequest(`User with ${data.email} already have account`);
+      throw ApiError.BadRequest(`User with ${data.login} already have account`);
     }
     const hashPass = await bcrypt.hash(data.password, 3);
     const acticationLink = uuidv4();
     const newUser = await User.create({
-      login: data.email,
+      login: data.login,
       password: hashPass,
       name: data.name,
       surname: data.surname,
@@ -28,7 +28,7 @@ class UserService {
       acticationLink: acticationLink,
     });
     /* await mailService.sendActivationMail(
-      data.email,
+      data.login,
       `${process.env.API_URL}/api/activate/${acticationLink}`
     ); */
     const userDto = new UserDto(newUser.toJSON());
@@ -47,15 +47,15 @@ class UserService {
     user.isActivated = true;
     await user.save();
   }
-  async login(email, password) {
+  async login(login, password) {
     const user = await User.findOne({
       where: {
-        login: email,
+        login: login,
       },
       raw: true,
     });
     if (!user) {
-      throw ApiError.BadRequest("user with this email is not found");
+      throw ApiError.BadRequest("user with this login is not found");
     }
     const isPassEq = await bcrypt.compare(password, user.password);
     if (!isPassEq) {
@@ -95,7 +95,64 @@ class UserService {
   }
   async getAllUsers() {
     const users = await User.findAll();
-    return users;
+    let AreaUsers = [];
+    for (let index = 0; index < users.length; index++) {
+      let ParseOffer = JSON.stringify(users[index], null, 2);
+      AreaUsers.push(JSON.parse(ParseOffer));
+    }
+    AreaUsers.sort((a, b) => a.id - b.id);
+    return AreaUsers;
+  }
+  async ChangeRoleUser(userData) {
+    try {
+      const user = await User.update(
+        { role: userData.role, area_of_improvement: userData.area },
+        { where: { id: userData.id } }
+      );
+      return "successful";
+    } catch (error) {
+      return ApiError.BadRequest(error);
+    }
+  }
+  async ChangeData(data) {
+    try {
+      const user = await User.update(
+        {
+          login: data.login,
+          name: data.name,
+          surname: data.surname,
+          secondname: data.secondname,
+          group: data.group,
+        },
+        { where: { id: data.id } }
+      );
+      return "data changed";
+    } catch (error) {
+      return ApiError.BadRequest(error);
+    }
+  }
+  async ResetPass(userData) {
+    const user = await User.findOne({
+      where: { login: userData.login },
+      raw: true,
+    });
+    if (!user) {
+      return ApiError.BadRequest("user with this login is not found");
+    } /* else {
+      await mailService.sendActivationMail(
+        data.login,
+        `${process.env.API_URL}/api/activate/${user.acticationLink}`
+      );
+    } */
+    const isPassEq = await bcrypt.compare(userData.password, user.password);
+    if (!isPassEq) {
+      const NewPass = await bcrypt.hash(userData.password, 3);
+      await User.update(
+        { password: NewPass },
+        { where: { login: userData.login } }
+      );
+      return "pass reset";
+    } else return "passwords cant be equals";
   }
 }
 export default new UserService();
