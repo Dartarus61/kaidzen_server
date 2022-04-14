@@ -1,5 +1,7 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
 import User from "./user_models.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 const sequelize = new Sequelize("postgres", "postgres", "postgres", {
   host: process.env.DB_HOST || "localhost",
