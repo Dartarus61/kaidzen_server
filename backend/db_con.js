@@ -5,17 +5,19 @@ import UserModel from './models/user_model.js'
 import TokenModel from './models/token_model.js'
 
 export async function db_connect() {
-    const sequelize = new Sequelize(
-        process.env.DB_NAME || 'postgres',
-        process.env.DB_USER || 'postgres',
-        process.env.DB_PASSWORD || 'postgres',
-        {
-            host: process.env.DB_HOST || 'localhost',
-            port: process.env.DB_PORT || '5432',
-            dialect: 'postgres',
-            freezeTableName: true,
-        }
-    )
+    const sequelize = process.env.DATABASE_URL
+        ? new Sequelize(process.env.DATABASE_URL)
+        : new Sequelize(
+              process.env.DB_NAME || 'postgres',
+              process.env.DB_USER || 'postgres',
+              process.env.DB_PASSWORD || 'postgres',
+              {
+                  host: process.env.DB_HOST || 'localhost',
+                  port: process.env.DB_PORT || '5432',
+                  dialect: 'postgres',
+                  freezeTableName: true,
+              }
+          )
     try {
         await sequelize.authenticate()
         console.log('Соединение с БД было успешно установлено')

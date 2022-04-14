@@ -8,10 +8,6 @@ import errorMiddleware from './backend/middlewares/error_midleware.js'
 import { Offer_router } from './backend/router/router.offers.js'
 import path from 'path'
 
-if (process.env.NODE_ENV == 'PROD') {
-    dotenv.config({ path: path.resolve('.prod.env') })
-} else dotenv.config()
-
 const app = express()
 app.use(express.json())
 app.use(cookieParser())
