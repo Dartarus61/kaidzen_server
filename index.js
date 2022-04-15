@@ -16,8 +16,6 @@ app.use('/api', User_router)
 app.use('/api', Offer_router)
 app.use(errorMiddleware)
 
-console.log(process.env)
-
 const start = async () => {
     try {
         app.listen(process.env.PORT || 3001, () => {
