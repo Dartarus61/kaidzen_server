@@ -6,19 +6,19 @@ export default async function (req, res, next) {
     const AllOfffers = await OfferModel.findAll({
         include: CommentModel,
     })
+
     if (!AllOfffers) next()
     for (let index = 0; index < AllOfffers.length; index++) {
         let parseOffer = JSON.stringify(AllOfffers[index], null, 2)
         const offer = JSON.parse(parseOffer)
-
         if (offer.accepted == true || offer.accepted == false) continue
-        if (!offer.Comments) continue
-        const count = await UserModel.findAll({
+        if (!offer.comments) continue
+        const count = await UserModel.findAndCountAll({
             where: { area_of_improvement: offer.area_of_improvement },
             raw: true,
         })
-
-        if (count.length == offer.Comments.length) {
+        console.log(count.count)
+        if (count.count == offer.comments.length) {
             if (offer.solution_temp == null) AllOfffers[index].update({ accepted: true })
             else AllOfffers[index].update({ accepted: false })
         } else AllOfffers[index].update({ accepted: 'На рассмотрении' })

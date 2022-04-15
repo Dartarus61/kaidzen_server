@@ -143,7 +143,7 @@ class OfferService {
         return [output.filePath, output.fileName]
     }
     async getalloffers() {
-        const offers = await OfferModel.findAll()
+        const offers = await OfferModel.findAll({ include: CommentModel })
         return await Offerconstruct(offers)
     }
 }
