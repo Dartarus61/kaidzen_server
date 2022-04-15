@@ -1,5 +1,5 @@
-import User from '../models/user_model.js'
-import Comment from '../models/comment_model.js'
+import UserModel from '../models/user_model.js'
+import CommentModel from '../models/comment_model.js'
 import OfferModel from '../models/offer_model.js'
 import path from 'path'
 import { Op, where } from 'sequelize'
@@ -10,9 +10,10 @@ async function Offerconstruct(OfferArr) {
     for (let index = 0; index < OfferArr.length; index++) {
         let ParseOffer = JSON.stringify(OfferArr[index], null, 2)
         AreaOffers.push(JSON.parse(ParseOffer))
+        console.log(AreaOffers[index])
 
-        let user = await User.findOne({
-            where: { id: OfferArr[index].UserId },
+        let user = await UserModel.findOne({
+            where: { id: AreaOffers[index].userId },
             raw: true,
         })
 
@@ -21,20 +22,21 @@ async function Offerconstruct(OfferArr) {
         if (!AreaOffers[index].Comments) continue
 
         for (let j = 0; j < AreaOffers[index].Comments.length; j++) {
-            let boss = await User.findOne({
-                where: { id: AreaOffers[index].Comments[j].UserId },
+            let boss = await UserModel.findOne({
+                where: { id: AreaOffers[index].Comments[j].userId },
                 raw: true,
             })
 
             AreaOffers[index].Comments[j].Name = boss.name + ' ' + boss.surname + ' ' + boss.secondname
         }
     }
+
     AreaOffers.sort((a, b) => a.id - b.id)
     return AreaOffers
 }
 class OfferService {
     async UserSendOffer(data, filedata) {
-        const user = await User.findOne({
+        const user = await UserModel.findOne({
             where: {
                 id: data.id,
             },
@@ -60,8 +62,8 @@ class OfferService {
     }
     async UserGetOffers(id) {
         const user = await OfferModel.findAll({
-            where: { UserId: id },
-            include: Comment,
+            where: { userId: id },
+            include: CommentModel,
         })
         if (!user) return 0
         let myoffers = []
@@ -69,11 +71,11 @@ class OfferService {
             let parsejson = JSON.stringify(user[index], null, 2)
             myoffers.push(JSON.parse(parsejson))
 
-            if (!myoffers[index].Comments.length) continue
+            if (!myoffers[index].Comments) continue
 
             for (let j = 0; j < myoffers[index].Comments.length; j++) {
-                let boss = await User.findOne({
-                    where: { id: myoffers[index].Comments[j].UserId },
+                let boss = await UserModel.findOne({
+                    where: { id: myoffers[index].Comments[j].userId },
                     raw: true,
                 })
 
@@ -89,7 +91,7 @@ class OfferService {
                 area_of_improvement: data.area,
                 [Op.or]: [{ accepted: 'На рассмотрении' }, { accepted: null }],
             },
-            include: Comment,
+            include: CommentModel,
         })
         let finalMas = []
         let MastersOffers = await Offerconstruct(OfferArr)
@@ -99,7 +101,7 @@ class OfferService {
                 continue
             }
             for (let j = 0; j < MastersOffers[index].Comments.length; j++) {
-                if (MastersOffers[index].Comments[j].UserId == data.id) continue
+                if (MastersOffers[index].Comments[j].userId == data.id) continue
                 else {
                     finalMas.push(MastersOffers[index])
                     break
@@ -114,7 +116,7 @@ class OfferService {
                 area_of_improvement: data.area,
                 [Op.or]: [{ accepted: 'true' }, { accepted: 'false' }],
             },
-            include: Comment,
+            include: CommentModel,
         })
         return await Offerconstruct(offers)
     }
@@ -122,7 +124,7 @@ class OfferService {
         const newComment = await OfferModel.findOne({ where: { id: data.id } })
         await newComment.createComment({
             description: data.ctx,
-            UserId: data.userId,
+            userId: data.userId,
         })
         newComment.update({ solution_temp: false })
         return 'successful denied'
@@ -131,7 +133,7 @@ class OfferService {
         const newComment = await OfferModel.findOne({ where: { id: data.id } })
         await newComment.createComment({
             description: data.ctx,
-            UserId: data.userId,
+            userId: data.userId,
         })
         return 'successful true'
     }
