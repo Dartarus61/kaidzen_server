@@ -123,7 +123,7 @@ class OfferService {
         const newComment = await OfferModel.findOne({ where: { id: data.id } })
         await newComment.createComment({
             description: data.ctx,
-            userId: data.UserId,
+            UserId: data.UserId,
         })
         newComment.update({ solution_temp: false })
         return 'successful denied'
@@ -132,7 +132,7 @@ class OfferService {
         const newComment = await OfferModel.findOne({ where: { id: data.id } })
         await newComment.createComment({
             description: data.ctx,
-            userId: data.UserId,
+            UserId: data.UserId,
         })
         return 'successful true'
     }
