@@ -12,7 +12,7 @@ export default async function (req, res, next) {
         const offer = JSON.parse(parseOffer)
 
         if (offer.accepted == true || offer.accepted == false) continue
-
+        if (!offer.Comments) continue
         const count = await UserModel.findAll({
             where: { area_of_improvement: offer.area_of_improvement },
             raw: true,
