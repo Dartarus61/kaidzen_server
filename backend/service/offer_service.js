@@ -10,7 +10,6 @@ async function Offerconstruct(OfferArr) {
     for (let index = 0; index < OfferArr.length; index++) {
         let ParseOffer = JSON.stringify(OfferArr[index], null, 2)
         AreaOffers.push(JSON.parse(ParseOffer))
-        console.log(AreaOffers[index])
 
         let user = await UserModel.findOne({
             where: { id: AreaOffers[index].userId },
@@ -96,7 +95,7 @@ class OfferService {
         let finalMas = []
         let MastersOffers = await Offerconstruct(OfferArr)
         for (let index = 0; index < MastersOffers.length; index++) {
-            if (!MastersOffers[index].Comments.length) {
+            if (!MastersOffers[index].Comments) {
                 finalMas.push(MastersOffers[index])
                 continue
             }
